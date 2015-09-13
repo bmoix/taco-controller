@@ -5,6 +5,7 @@ var w;
 var h;
 var context;
 var enemies = [];
+var coords = [];
 var player;
 var viewing;
 var activate = true;
@@ -92,7 +93,10 @@ $(document).on("game_message", function (e, message) {
     // Here you can add to the switch statement to respond to individual game messages differently:
     switch (payload.type) {
         case "enemy_list_info":
-        enemies = payload.list;
-        break;
+            enemies = payload.list;
+            break;
+        case "fov_info":
+            coords = payload.coords;
+            break;
     }
 });
