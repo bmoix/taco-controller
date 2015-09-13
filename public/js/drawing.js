@@ -16,7 +16,7 @@ function init()
   context = canvas.getContext('2d');
   w = window.innerWidth;
   h = window.innerHeight;
-  player = { x: w/2, y: h, r: w/6};
+  player = { x: w/2, y: h, r: w/4};
   console.log(w, h);
   canvas.width = w;
   canvas.height = h;
@@ -39,6 +39,7 @@ function draw()
   context.beginPath();
   context.arc(player.x, player.y, player.r, 0, Math.PI*2);
   context.closePath();
+  context.lineWidth = 2;
   context.stroke();
   // Draws the enemies
   context.fillStyle="#0000ff";
