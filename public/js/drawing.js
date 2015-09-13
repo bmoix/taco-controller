@@ -80,9 +80,7 @@ function addEnemy(xPosition, yPosition)
     "type": "addEnemy",
     "posx": xPosition/w,
     "posy": yPosition/h,
-  })
-  x.push(xPosition);
-  y.push(yPosition);
+  });
 }
 
 function isInSafeZone(xPosition, yPosition)
