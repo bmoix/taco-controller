@@ -39,11 +39,11 @@ function draw()
     // Draws the camera view angle
     context.beginPath();
     context.moveTo(player.x, player.y);
-    context.lineTo(coords.minx * w, coords.miny * h);
+    context.lineTo(coords.minx*w/4, coords.miny*h);
     context.stroke();
     context.beginPath();
     context.moveTo(player.x, player.y);
-    context.lineTo(coords.maxx * w, coords.maxy * h);
+    context.lineTo(coords.maxx*w/4, coords.maxy*h);
     context.stroke();
     // Draws the enemies
     for (i = 0; i < enemies.length; i++) {
@@ -91,7 +91,7 @@ function isInSafeZone(xPosition, yPosition)
 }
 
 $(document).on("game_message", function (e, message) {
-    console.log("Received Message: " + JSON.stringify(message));
+    //console.log("Received Message: " + JSON.stringify(message));
     var payload = message.payload;
     // Here you can add to the switch statement to respond to individual game messages differently:
     switch (payload.type) {
