@@ -16,7 +16,7 @@ function Connection (onGameMessage) {
     this.connected = null;
     this.socket = io();
 
-    this.index = getIndex();
+    this.index = Math.floor(Math.random() * 100000);
 
     this.socket.on('game_message', Connection.prototype.onMessage.bind(this));
     this.socket.on('connect', Connection.prototype.onOpen.bind(this));

@@ -48,6 +48,11 @@ setInterval(function() {
 
 app.use(express.static(__dirname + '/public'));
 
+app.get('/', function(req, res) {
+	var id = Math.floor(Math.random() * 100000);
+	res.sendFile(path.join(__dirname+'/public/index.html'));
+});
+
 app.get('/*', function (req, res) {
 	res.sendFile(path.join(__dirname+'/public/index.html'));
 });

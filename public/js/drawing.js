@@ -11,13 +11,14 @@ var viewing;
 var activate = true;
 var conn = new Connection();
 
+window.onresize = function() { location.reload(); }
 function init()
 {
     canvas = document.getElementById("canvas");
     context = canvas.getContext('2d');
     w = window.innerWidth;
     h = window.innerHeight;
-    player = {x: w/2, y: h, r: w/4};
+    player = {x: w/2, y: h - 75, r: w/4};
     viewing = { x: 100, y: 100};
     canvas.width = w;
     canvas.height = h;
@@ -54,11 +55,7 @@ function draw()
         context.fill();
     }
     // Draws the payer
-    // INSERT TACO HERE! located at ./img/taco.svg
-    context.beginPath();
-    context.arc(player.x, player.y-15, 15, 0, Math.PI*2);
-    context.fillStyle="#ff0000";
-    context.fill();
+    $("#tacotime").css({transform: 'scale(0.25)'}).offset({top: $("body").height()-120, left: $("body").width()/2 - 75});
     requestAnimationFrame(draw);
 }
 
