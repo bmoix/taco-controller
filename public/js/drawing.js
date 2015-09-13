@@ -18,7 +18,6 @@ function init()
   h = window.innerHeight;
   player = { x: w/2, y: h, r: w/4};
   viewing = { x: 100, y: 100, }
-  console.log(w, h);
   canvas.width = w;
   canvas.height = h;
   //setInterval(draw,10);
@@ -31,12 +30,6 @@ function init()
 function draw()
 {
   context.clearRect(0,0, w, h);
-  // Draws the payer
-  context.fillStyle="#ff0000";
-  context.beginPath();
-  context.arc(player.x, player.y-15, 15, 0, Math.PI*2);
-  context.closePath();
-  context.fill();
   // Draws the safe zone
   context.beginPath();
   context.arc(player.x, player.y, player.r, 0, Math.PI*2);
@@ -57,6 +50,13 @@ function draw()
     context.closePath();
     context.fill();
   }
+  // Draws the payer
+  // INSERT TACO HERE! located at ./img/taco.svg
+  context.fillStyle="#ff0000";
+  context.beginPath();
+  context.arc(player.x, player.y-15, 15, 0, Math.PI*2);
+  context.closePath();
+  context.fill();
   requestAnimationFrame(draw);
 }
 
