@@ -7,6 +7,7 @@ var context;
 var x = new Array();
 var y = new Array();
 var player;
+var viewing;
 var activate = true;
 var conn = new Connection();
 
@@ -17,6 +18,7 @@ function init()
   w = window.innerWidth;
   h = window.innerHeight;
   player = { x: w/2, y: h, r: w/4};
+  viewing = { x: 100, y: 100, }
   console.log(w, h);
   canvas.width = w;
   canvas.height = h;
@@ -40,6 +42,11 @@ function draw()
   context.arc(player.x, player.y, player.r, 0, Math.PI*2);
   context.closePath();
   context.lineWidth = 2;
+  context.stroke();
+  // Draws the camera view angle
+  context.beginPath();
+  context.moveTo(player.x, player.y);
+  context.lineTo(450, 50);
   context.stroke();
   // Draws the enemies
   context.fillStyle="#0000ff";
@@ -80,3 +87,21 @@ function isInSafeZone(xPosition, yPosition)
 {
   return Math.abs(xPosition - player.x) <= player.r && Math.abs(yPosition - player.y) <= player.r;
 }
+
+  $(document).on("game_message", function (e, message) {
+    console.log("Received Message: " + JSON.stringify(message));
+    var payload = message.payload;
+    // Here you can add to the switch statement to respond to individual game messages differently:
+    switch (payload.type) {
+        case "enable_powerup_button":
+            powerup_button.enablePowerup();
+            break;
+        case "disable_powerup_button":
+            powerup_button.disablePowerup();
+            break;
+        case "set_powerup_button_time":
+            //payload.time references a field named "time" sent from unity.
+            powerup_button.setPowerupTime(payload.time);
+            break;
+    }
+});
