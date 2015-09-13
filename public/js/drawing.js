@@ -60,7 +60,7 @@ function getClickPosition(event)
       activate = false;
       setTimeout(function(){
         activate = true;
-      }, 500);
+      }, 1000);
     }
 }
 
