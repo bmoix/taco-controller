@@ -22,10 +22,11 @@ function init()
   console.log(w, h);
   canvas.width = w;
   canvas.height = h;
-  setInterval(draw,10);
+  //setInterval(draw,10);
   conn.sendMessage({
     "type": "connect"
-  })
+  });
+  draw();
 }
 
 function draw()
@@ -49,13 +50,15 @@ function draw()
   context.lineTo(450, 50);
   context.stroke();
   // Draws the enemies
-  context.fillStyle="#0000ff";
-  for (i = 0; i < x.length; i++) {
+  for (i = 0; i < enemies.length; i++) {
+    rgba = enemies[i].color[0]+","+enemies[i].color[1]+","+enemies[i].color[2]+","+enemies[i].color[3]; 
+    context.fillStyle="rgba("+rgba+")";
     context.beginPath();
-    context.arc(x[i], y[i], 10, 0, Math.PI*2, true);
+    context.arc(enemies[i].posx * w, enemies[i].posy * h, 10, 0, Math.PI*2, true);
     context.closePath();
     context.fill();
   }
+  requestAnimationFrame(draw);
 }
 
 // Send event via EA. Normalized [0,1]
@@ -88,20 +91,13 @@ function isInSafeZone(xPosition, yPosition)
   return Math.abs(xPosition - player.x) <= player.r && Math.abs(yPosition - player.y) <= player.r;
 }
 
-  $(document).on("game_message", function (e, message) {
+$(document).on("game_message", function (e, message) {
     console.log("Received Message: " + JSON.stringify(message));
     var payload = message.payload;
     // Here you can add to the switch statement to respond to individual game messages differently:
     switch (payload.type) {
-        case "enable_powerup_button":
-            powerup_button.enablePowerup();
-            break;
-        case "disable_powerup_button":
-            powerup_button.disablePowerup();
-            break;
-        case "set_powerup_button_time":
-            //payload.time references a field named "time" sent from unity.
-            powerup_button.setPowerupTime(payload.time);
+        case "enemy_list_info":
+            enemies = payload.list;
             break;
     }
 });
