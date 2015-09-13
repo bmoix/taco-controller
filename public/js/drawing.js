@@ -7,6 +7,8 @@ var context;
 var enemies = [];
 var coords = [];
 var player;
+var playing;
+var gameover;
 var viewing;
 var activate = true;
 var conn = new Connection();
@@ -20,6 +22,8 @@ function init()
     h = window.innerHeight;
     player = {x: w/2, y: h - 75, r: w/4};
     viewing = { x: 100, y: 100};
+    playing = false;
+    gameover = false;
     canvas.width = w;
     canvas.height = h;
     //setInterval(draw,10);
@@ -32,33 +36,44 @@ function init()
 function draw()
 {
     context.clearRect(0,0, w, h);
-    // Draws the safe zone
-    context.beginPath();
-    context.arc(player.x, player.y, player.r, 0, Math.PI*2);
-    context.lineWidth = 2;
-    context.stroke();
-    // Draws the camera view angle
-    context.beginPath();
-    context.moveTo(player.x, player.y);
-    context.lineTo(coords.minx*w/4, coords.miny*h);
-    context.stroke();
-    context.beginPath();
-    context.moveTo(player.x, player.y);
-    context.lineTo(coords.maxx*w/4, coords.maxy*h);
-    context.stroke();
-    // Draws the enemies
-    for (i = 0; i < enemies.length; i++) {
-        if (Math.abs(enemies[i].posx * w - player.x) <= 25 && Math.abs(enemies[i].posy * h - player.y) <= 25) {}
-        else {
-            rgba = Math.round(enemies[i].color[0]*255)+","+Math.round(enemies[i].color[1]*255)+","+Math.round(enemies[i].color[2]*255)+","+enemies[i].color[3]; 
-            context.beginPath();
-            context.arc(enemies[i].posx * w, enemies[i].posy * h, 10, 0, Math.PI*2, true);
-            context.fillStyle="rgba("+rgba+")";
-            context.fill();
+    if (playing) {
+        // Draws the safe zone
+        context.beginPath();
+        context.arc(player.x, player.y, player.r, 0, Math.PI*2);
+        context.lineWidth = 2;
+        context.stroke();
+        // Draws the camera view angle
+        context.beginPath();
+        context.moveTo(player.x, player.y);
+        context.lineTo(coords.minx*w/4, coords.miny*h);
+        context.stroke();
+        context.beginPath();
+        context.moveTo(player.x, player.y);
+        context.lineTo(coords.maxx*w/4, coords.maxy*h);
+        context.stroke();
+        // Draws the enemies
+        for (i = 0; i < enemies.length; i++) {
+            if (Math.abs(enemies[i].posx * w - player.x) <= 25 && Math.abs(enemies[i].posy * h - player.y) <= 25) {}
+            else {
+                rgba = Math.round(enemies[i].color[0]*255)+","+Math.round(enemies[i].color[1]*255)+","+Math.round(enemies[i].color[2]*255)+","+enemies[i].color[3]; 
+                context.beginPath();
+                context.arc(enemies[i].posx * w, enemies[i].posy * h, 10, 0, Math.PI*2, true);
+                context.fillStyle="rgba("+rgba+")";
+                context.fill();
+            }
+        }
+        // Draws the payer
+        $("#tacotime").css({transform: 'scale(0.25)'}).offset({top: $("body").height()-120, left: $("body").width()/2 - 75});
+    }
+    else {
+        context.font="20px Georgia";
+        context.fillText("Waiting for game...",10,250);
+        if (gameover) {
+            context.font="40px Georgia";
+            context.fillText("GAME OVER",50,50);
         }
     }
-    // Draws the payer
-    $("#tacotime").css({transform: 'scale(0.25)'}).offset({top: $("body").height()-120, left: $("body").width()/2 - 75});
+
     requestAnimationFrame(draw);
 }
 
@@ -100,6 +115,14 @@ $(document).on("game_message", function (e, message) {
             break;
         case "fov_info":
             coords = payload.coords;
+            break;
+        case "start_game_notification":
+            playing = payload.start;
+            gameover = false;
+            break;
+        case "end_game_notification":
+            playing = !payload.end;
+            gameover = true;
             break;
     }
 });
