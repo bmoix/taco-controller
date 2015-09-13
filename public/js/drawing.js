@@ -12,52 +12,50 @@ var conn = new Connection();
 
 function init()
 {
-  canvas = document.getElementById("canvas");
-  context = canvas.getContext('2d');
-  w = window.innerWidth;
-  h = window.innerHeight;
-  player = { x: w/2, y: h, r: w/4};
-  viewing = { x: 100, y: 100, }
-  canvas.width = w;
-  canvas.height = h;
-  //setInterval(draw,10);
-  conn.sendMessage({
-    "type": "connect"
-  });
-  draw();
+    canvas = document.getElementById("canvas");
+    context = canvas.getContext('2d');
+    w = window.innerWidth;
+    h = window.innerHeight;
+    player = {x: w/2, y: h, r: w/4};
+    viewing = { x: 100, y: 100};
+    canvas.width = w;
+    canvas.height = h;
+    //setInterval(draw,10);
+    conn.sendMessage({
+        "type": "connect"
+    });
+    draw();
 }
 
 function draw()
 {
-  context.clearRect(0,0, w, h);
-  // Draws the safe zone
-  context.beginPath();
-  context.arc(player.x, player.y, player.r, 0, Math.PI*2);
-  context.closePath();
-  context.lineWidth = 2;
-  context.stroke();
-  // Draws the camera view angle
-  context.beginPath();
-  context.moveTo(player.x, player.y);
-  context.lineTo(450, 50);
-  context.stroke();
-  // Draws the enemies
-  for (i = 0; i < enemies.length; i++) {
-    rgba = enemies[i].color[0]+","+enemies[i].color[1]+","+enemies[i].color[2]+","+enemies[i].color[3]; 
-    context.fillStyle="rgba("+rgba+")";
+    context.clearRect(0,0, w, h);
+    // Draws the safe zone
     context.beginPath();
-    context.arc(enemies[i].posx * w, enemies[i].posy * h, 10, 0, Math.PI*2, true);
-    context.closePath();
+    context.arc(player.x, player.y, player.r, 0, Math.PI*2);
+    context.lineWidth = 2;
+    context.stroke();
+    // Draws the camera view angle
+    context.beginPath();
+    context.moveTo(player.x, player.y);
+    context.lineTo(450, 50);
+    context.stroke();
+    // Draws the enemies
+    for (i = 0; i < enemies.length; i++) {
+        rgba = Math.round(enemies[i].color[0]*255)+","+Math.round(enemies[i].color[1]*255)+","+Math.round(enemies[i].color[2]*255)+","+enemies[i].color[3]; 
+        context.beginPath();
+        context.arc(enemies[i].posx * w, enemies[i].posy * h, 10, 0, Math.PI*2, true);
+        context.fillStyle="rgba("+rgba+")";
+        context.fill();
+    }
+    // Draws the payer
+    // INSERT TACO HERE! located at ./img/taco.svg
+    context.beginPath();
+    context.arc(player.x, player.y-15, 15, 0, Math.PI*2);
+    context.fillStyle="#ff0000";
     context.fill();
+    requestAnimationFrame(draw);
   }
-  // Draws the payer
-  // INSERT TACO HERE! located at ./img/taco.svg
-  context.fillStyle="#ff0000";
-  context.beginPath();
-  context.arc(player.x, player.y-15, 15, 0, Math.PI*2);
-  context.closePath();
-  context.fill();
-  requestAnimationFrame(draw);
 }
 
 // Send event via EA. Normalized [0,1]
@@ -70,8 +68,8 @@ function getClickPosition(event)
       activate = false;
       setTimeout(function(){
         activate = true;
-      }, 1000);
-    }
+    }, 1000);
+  }
 }
 
 function addEnemy(xPosition, yPosition)
@@ -80,7 +78,7 @@ function addEnemy(xPosition, yPosition)
     "type": "addEnemy",
     "posx": xPosition/w,
     "posy": yPosition/h,
-  });
+});
 }
 
 function isInSafeZone(xPosition, yPosition)
@@ -94,7 +92,7 @@ $(document).on("game_message", function (e, message) {
     // Here you can add to the switch statement to respond to individual game messages differently:
     switch (payload.type) {
         case "enemy_list_info":
-            enemies = payload.list;
-            break;
+        enemies = payload.list;
+        break;
     }
 });
