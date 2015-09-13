@@ -60,7 +60,6 @@ function draw()
     context.fillStyle="#ff0000";
     context.fill();
     requestAnimationFrame(draw);
-  }
 }
 
 // Send event via EA. Normalized [0,1]
