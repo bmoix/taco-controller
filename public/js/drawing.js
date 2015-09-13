@@ -39,7 +39,11 @@ function draw()
     // Draws the camera view angle
     context.beginPath();
     context.moveTo(player.x, player.y);
-    context.lineTo(450, 50);
+    context.lineTo(coords.minx * w, coords.miny * h);
+    context.stroke();
+    context.beginPath();
+    context.moveTo(player.x, player.y);
+    context.lineTo(coords.maxx * w, coords.maxy * h);
     context.stroke();
     // Draws the enemies
     for (i = 0; i < enemies.length; i++) {
