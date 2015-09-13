@@ -48,11 +48,14 @@ function draw()
     context.stroke();
     // Draws the enemies
     for (i = 0; i < enemies.length; i++) {
-        rgba = Math.round(enemies[i].color[0]*255)+","+Math.round(enemies[i].color[1]*255)+","+Math.round(enemies[i].color[2]*255)+","+enemies[i].color[3]; 
-        context.beginPath();
-        context.arc(enemies[i].posx * w, enemies[i].posy * h, 10, 0, Math.PI*2, true);
-        context.fillStyle="rgba("+rgba+")";
-        context.fill();
+        if (Math.abs(enemies[i].posx * w - player.x) <= 25 && Math.abs(enemies[i].posy * h - player.y) <= 25) {}
+        else {
+            rgba = Math.round(enemies[i].color[0]*255)+","+Math.round(enemies[i].color[1]*255)+","+Math.round(enemies[i].color[2]*255)+","+enemies[i].color[3]; 
+            context.beginPath();
+            context.arc(enemies[i].posx * w, enemies[i].posy * h, 10, 0, Math.PI*2, true);
+            context.fillStyle="rgba("+rgba+")";
+            context.fill();
+        }
     }
     // Draws the payer
     $("#tacotime").css({transform: 'scale(0.25)'}).offset({top: $("body").height()-120, left: $("body").width()/2 - 75});
